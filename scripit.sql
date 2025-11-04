@@ -1,29 +1,94 @@
-DO $$
-DECLARE
-valor_total INT;
-BEGIN
-CALL sp_calcular_valor_de_um_pedido(1, valor_total);
-RAISE NOTICE 'Total do pedido %: R$%', 1, valor_total;
-END;
-$$
+--Simula a entrada de uma pessoa no restaurante que consome alguns itens e paga logo a seguir
+-- DO $$
+-- DECLARE
+--     v_troco DECIMAL (10,2);
+--     v_valor_total_pedido DECIMAL(10,2);
+--     v_valor_pago DECIMAL (10,2) := 17;
+--     v_cod_cliente INT := 10;
+--     v_nome_cliente VARCHAR(200) := 'Ana Maria';
+--     v_cod_pedido INT;
+-- BEGIN
+--     CALL sp_cadastrar_cliente(v_nome_cliente, v_cod_cliente);
+--     CALL sp_criar_pedido(v_cod_pedido, v_cod_cliente);
+--     CALL sp_adicionar_item_a_pedido(1, v_cod_pedido);
+--     CALL sp_adicionar_item_a_pedido(3, v_cod_pedido);
+--     CALL sp_calcular_valor_de_um_pedido(v_cod_pedido, valor_total_pedido);
+--     CALL sp_fechar_pedido(v_valor_pago, v_cod_pedido);
+--     CALL sp_calcular_troco(v_troco, v_valor_total_pedido, v_valor_pago);
+--     RAISE NOTICE 'Seu troco é R$%', v_troco;
+-- END;
+-- $$
 
 
-CREATE OR REPLACE PROCEDURE sp_calcular_valor_de_um_pedido (
-    IN p_cod_pedido INT,
-     OUT valor_total INT)
-LANGUAGE plpgsql
-AS $$
-BEGIN
-    SELECT SUM(valor) FROM
-    tb_pedido p
-    INNER JOIN tb_item_pedido ip ON
-    p.cod_pedido = ip.cod_pedido
-    INNER JOIN tb_item i 
-    ON i.cod_item = ip.cod_item
-    WHERE p.cod_pedido = $1
-    INTO $2;
-END;
-$$
+
+-- CREATE OR REPLACE PROCEDURE sp_calcular_troco(
+--     OUT p_troco DECIMAL(10,2),
+--     IN p_valor_total_pedido DECIMAL (10,2),
+--     IN p_valor_pago DECIMAL(10,2)
+-- ) LANGUAGE plpgsql
+-- AS $$
+-- BEGIN
+--     p_troco:= p_valor_pago - p_valor_total_pedido;
+-- END;
+-- $$
+
+
+-- DO $$
+-- BEGIN
+--     CALL sp_fechar_pedido(15, 1);
+-- END;
+-- $$
+
+-- DROP PROCEDURE sp_fechar_pedido;
+
+-- CREATE OR REPLACE PROCEDURE sp_fechar_pedido(
+--     IN p_valor_pago DECIMAL(10,2),
+--     IN p_cod_pedido INT
+-- ) LANGUAGE plpgsql
+-- AS $$
+-- DECLARE 
+--     valor_total_pedido DECIMAL(10,2);
+-- BEGIN
+--     CALL sp_calcular_valor_de_um_pedido(cod_pedido, valor_total_do_pedido);
+--     IF p_valor_pago >= valor_total_pedido THEN
+--         UPDATE tb_pedido p SET
+--          p.status = 'fechado',
+--          p.data_modificacao = CURRENT_TIMESTAMP
+--          WHERE cod_pedido = p_cod_pedido;
+--     ELSE
+--         RAISE NOTICE 'R$% é insulficiente para pagar o pedido de valor R$%',
+--         valor_pago, valor_total_pedido;
+--     END IF;
+-- END;
+-- $$  
+
+
+-- DO $$
+-- DECLARE
+-- valor_total INT;
+-- BEGIN
+-- CALL sp_calcular_valor_de_um_pedido(1, valor_total);
+-- RAISE NOTICE 'Total do pedido %: R$%', 1, valor_total;
+-- END;
+-- $$
+
+
+-- CREATE OR REPLACE PROCEDURE sp_calcular_valor_de_um_pedido (
+--     IN p_cod_pedido INT,
+--      OUT valor_total INT)
+-- LANGUAGE plpgsql
+-- AS $$
+-- BEGIN
+--     SELECT SUM(valor) FROM
+--     tb_pedido p
+--     INNER JOIN tb_item_pedido ip ON
+--     p.cod_pedido = ip.cod_pedido
+--     INNER JOIN tb_item i 
+--     ON i.cod_item = ip.cod_item
+--     WHERE p.cod_pedido = $1
+--     INTO $2;
+-- END;
+-- $$
 
 
 -- CALL sp_adicionar_item_a_pedido (1, 1);
@@ -42,8 +107,8 @@ $$
 -- END;
 -- $$
 
-SELECT * FROM tb_item_pedido;
-SELECT * FROM tb_pedido;
+-- SELECT * FROM tb_item_pedido;
+-- SELECT * FROM tb_pedido;
 
 
 
